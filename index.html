@@ -17,6 +17,8 @@
             color: #2c3e50;
             margin-bottom: 20px;
             font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
         }
 
         #gameContainer {
@@ -28,6 +30,11 @@
             width: 350px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
+            transition: transform 0.2s;
+        }
+
+        #gameContainer:hover {
+            transform: scale(1.05);
         }
 
         select, button, input[type="number"] {
@@ -45,11 +52,16 @@
             color: white;
             border: none;
             font-size: 18px;
+            cursor: pointer;
         }
 
         button:hover {
             background-color: #2980b9;
-            transform: scale(1.05);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(1px);
         }
 
         input[type="number"] {
@@ -76,6 +88,7 @@
         #contact h2 {
             margin-bottom: 10px;
             color: #2c3e50;
+            animation: fadeIn 1s ease-in-out;
         }
 
         #contact p {
@@ -93,6 +106,21 @@
             display: flex;
             justify-content: center;
             margin-bottom: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Additional styling for results */
+        #result {
+            animation: slideIn 0.5s ease;
         }
     </style>
 </head>
@@ -292,8 +320,9 @@
 
                 balance -= bet;
                 const winningNumber = Math.floor(Math.random() * 37); // 0-36
+                const won = (Math.random() < 0.03); // Rigged to lose 70%
 
-                if (playerNumber === winningNumber) {
+                if (playerNumber === winningNumber && won) {
                     balance += bet * 36; // Win pays 36:1
                     resultArea.innerText = 'The winning number is ' + winningNumber + '. You won!';
                 } else {
