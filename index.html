@@ -55,6 +55,12 @@
         button:hover {
             background-color: #0056b3;
         }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -70,12 +76,17 @@
             </select>
         </div>
         <div id="gameArea"></div>
+        <div id="result"></div>
     </div>
 
     <script>
+        let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 100;
+
         function loadGame() {
             const gameArea = document.getElementById('gameArea');
+            const resultArea = document.getElementById('result');
             gameArea.innerHTML = ''; // Clear previous game
+            resultArea.innerHTML = ''; // Clear previous result
 
             const game = document.getElementById('gameSelector').value;
             if (game === 'coinFlip') {
@@ -87,11 +98,18 @@
             } else if (game === 'poker') {
                 pokerGame();
             }
+            updateBalanceDisplay();
+        }
+
+        function updateBalanceDisplay() {
+            const resultArea = document.getElementById('result');
+            resultArea.innerHTML = 'Current Balance: $' + balance;
+            localStorage.setItem('balance', balance); // Save balance to localStorage
         }
 
         function coinFlipGame() {
-            let balance = 100; // Starting balance
             const gameArea = document.getElementById('gameArea');
+            const resultArea = document.getElementById('result');
 
             const betInput = document.createElement('input');
             betInput.type = 'number';
@@ -102,7 +120,7 @@
             button.onclick = function () {
                 const bet = parseInt(betInput.value);
                 if (bet > balance || bet <= 0 || isNaN(bet)) {
-                    alert('Invalid bet!');
+                    resultArea.innerText = 'Invalid bet!';
                     return;
                 }
 
@@ -111,13 +129,15 @@
 
                 if (won) {
                     balance += bet * 2; // Double the bet if won
-                    alert('You won! New balance: $' + balance);
+                    resultArea.innerText = 'You won!';
                 } else {
-                    alert('You lost! New balance: $' + balance);
+                    resultArea.innerText = 'You lost!';
                 }
 
+                updateBalanceDisplay();
+
                 if (balance <= 0) {
-                    alert('You went bankrupt in "Coin Flip Game"');
+                    resultArea.innerText = 'You went bankrupt in "Coin Flip Game"';
                     loadGame(); // Reset game
                 }
             };
@@ -127,8 +147,8 @@
         }
 
         function diceRollGame() {
-            let balance = 100; // Starting balance
             const gameArea = document.getElementById('gameArea');
+            const resultArea = document.getElementById('result');
 
             const betInput = document.createElement('input');
             betInput.type = 'number';
@@ -139,7 +159,7 @@
             button.onclick = function () {
                 const bet = parseInt(betInput.value);
                 if (bet > balance || bet <= 0 || isNaN(bet)) {
-                    alert('Invalid bet!');
+                    resultArea.innerText = 'Invalid bet!';
                     return;
                 }
 
@@ -149,13 +169,15 @@
 
                 if (won) {
                     balance += bet * 2; // Double the bet if won
-                    alert('You rolled a ' + roll + '. You won! New balance: $' + balance);
+                    resultArea.innerText = 'You rolled a ' + roll + '. You won!';
                 } else {
-                    alert('You rolled a ' + roll + '. You lost! New balance: $' + balance);
+                    resultArea.innerText = 'You rolled a ' + roll + '. You lost!';
                 }
 
+                updateBalanceDisplay();
+
                 if (balance <= 0) {
-                    alert('You went bankrupt in "Dice Roll Game"');
+                    resultArea.innerText = 'You went bankrupt in "Dice Roll Game"';
                     loadGame(); // Reset game
                 }
             };
@@ -165,8 +187,8 @@
         }
 
         function rouletteGame() {
-            let balance = 100; // Starting balance
             const gameArea = document.getElementById('gameArea');
+            const resultArea = document.getElementById('result');
 
             const betInput = document.createElement('input');
             betInput.type = 'number';
@@ -177,7 +199,7 @@
             button.onclick = function () {
                 const bet = parseInt(betInput.value);
                 if (bet > balance || bet <= 0 || isNaN(bet)) {
-                    alert('Invalid bet!');
+                    resultArea.innerText = 'Invalid bet!';
                     return;
                 }
 
@@ -186,19 +208,21 @@
                 const playerNumber = parseInt(prompt('Pick a number (0-36):'));
 
                 if (playerNumber < 0 || playerNumber > 36 || isNaN(playerNumber)) {
-                    alert('Invalid number! Please pick between 0 and 36.');
+                    resultArea.innerText = 'Invalid number! Please pick between 0 and 36.';
                     return;
                 }
 
                 if (playerNumber == winningNumber) {
                     balance += bet * 36; // Win pays 36:1
-                    alert('The winning number is ' + winningNumber + '. You won! New balance: $' + balance);
+                    resultArea.innerText = 'The winning number is ' + winningNumber + '. You won!';
                 } else {
-                    alert('The winning number is ' + winningNumber + '. You lost! New balance: $' + balance);
+                    resultArea.innerText = 'The winning number is ' + winningNumber + '. You lost!';
                 }
 
+                updateBalanceDisplay();
+
                 if (balance <= 0) {
-                    alert('You went bankrupt in "Roulette Game"');
+                    resultArea.innerText = 'You went bankrupt in "Roulette Game"';
                     loadGame(); // Reset game
                 }
             };
@@ -208,8 +232,8 @@
         }
 
         function pokerGame() {
-            let balance = 100; // Starting balance
             const gameArea = document.getElementById('gameArea');
+            const resultArea = document.getElementById('result');
 
             const betInput = document.createElement('input');
             betInput.type = 'number';
@@ -220,7 +244,7 @@
             button.onclick = function () {
                 const bet = parseInt(betInput.value);
                 if (bet > balance || bet <= 0 || isNaN(bet)) {
-                    alert('Invalid bet!');
+                    resultArea.innerText = 'Invalid bet!';
                     return;
                 }
 
@@ -228,20 +252,22 @@
                 const playerCard = Math.floor(Math.random() * 13) + 1; // Player's card (1-13)
                 const dealerCard = Math.floor(Math.random() * 13) + 1; // Dealer's card (1-13)
 
-                alert('Your card: ' + playerCard + ', Dealer\'s card: ' + dealerCard);
+                resultArea.innerText = 'Your card: ' + playerCard + ', Dealer\'s card: ' + dealerCard;
 
                 if (playerCard > dealerCard) {
                     balance += bet * 2; // Player wins
-                    alert('You win! New balance: $' + balance);
+                    resultArea.innerText += ' You win!';
                 } else if (playerCard < dealerCard) {
-                    alert('You lose! New balance: $' + balance);
+                    resultArea.innerText += ' You lose!';
                 } else {
                     balance += bet; // Tie, return bet
-                    alert('It\'s a tie! New balance: $' + balance);
+                    resultArea.innerText += ' It\'s a tie!';
                 }
 
+                updateBalanceDisplay();
+
                 if (balance <= 0) {
-                    alert('You went bankrupt in "Poker Game"');
+                    resultArea.innerText += ' You went bankrupt in "Poker Game"';
                     loadGame(); // Reset game
                 }
             };
@@ -249,6 +275,15 @@
             gameArea.appendChild(betInput);
             gameArea.appendChild(button);
         }
+
+        // Load the selected game on page load
+        window.onload = function () {
+            const savedGame = localStorage.getItem('selectedGame');
+            if (savedGame) {
+                document.getElementById('gameSelector').value = savedGame;
+                loadGame();
+            }
+        };
     </script>
 </body>
 </html>
