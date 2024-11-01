@@ -1,67 +1,57 @@
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #6a11cb, #2575fc);
-    margin: 0;
-    padding: 20px;
-    color: #fff;
+let balance = 100; // Starting balance
+
+function loadGame() {
+    const game = document.getElementById('gameSelector').value;
+    const gameArea = document.getElementById('gameArea');
+    const resultArea = document.getElementById('result');
+    
+    gameArea.innerHTML = '';
+    resultArea.innerHTML = '';
+
+    if (game) {
+        gameArea.innerHTML = `
+            <input type="number" id="betAmount" placeholder="Enter your bet" min="1" max="${balance}">
+            <button onclick="${game}()">Play</button>
+        `;
+    }
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
+function coinFlip() {
+    playGame(2, () => Math.random() < 0.5 ? 'Heads' : 'Tails');
 }
 
-#gameContainer {
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
-    color: #333;
+function rollDice() {
+    playGame(6, () => Math.floor(Math.random() * 6) + 1);
 }
 
-select, input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+function spinRoulette() {
+    playGame(37, () => Math.floor(Math.random() * 37));
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #28a745;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+function playPoker() {
+    const result = 'Poker is complex! Try again.';
+    document.getElementById('result').innerText = result;
 }
 
-button:hover {
-    background-color: #218838;
-}
+function playGame(maxValue, getResult) {
+    const betAmount = parseInt(document.getElementById('betAmount').value);
+    const resultArea = document.getElementById('result');
 
-#result {
-    font-size: 1.5em;
-    color: #28a745;
-    text-align: center;
-    margin-top: 10px;
-}
+    if (betAmount > 0 && betAmount <= balance) {
+        balance -= betAmount; // Deduct bet from balance
+        const result = getResult();
+        resultArea.innerText = `Result: ${result}`;
 
-#contact {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 0.9em;
-}
-
-footer {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 0.9em;
-    color: #666;
+        // Simulate win/loss
+        const win = Math.random() < 0.5; // 50% chance to win
+        if (win) {
+            const payout = betAmount * 2; // Win double
+            balance += payout;
+            resultArea.innerText += ` - You win! Total: ${balance}`;
+        } else {
+            resultArea.innerText += ` - You lose! Total: ${balance}`;
+        }
+    } else {
+        resultArea.innerText = `Invalid bet. Your balance: ${balance}`;
+    }
 }
