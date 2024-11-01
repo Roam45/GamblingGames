@@ -13,6 +13,7 @@
         <div id="signupContainer">
             <h2>Create an Account</h2>
             <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
             <button class="btn" onclick="signup()">Sign Up</button>
             <div id="signupMessage"></div>
         </div>
@@ -39,6 +40,14 @@
     <section id="leaderboard">
         <h2>Leaderboard</h2>
         <ul id="leaderboardList"></ul>
+    </section>
+
+    <section id="adminPanel" style="display:none;">
+        <h2>Admin Panel (RoamDev)</h2>
+        <input type="text" id="editUsername" placeholder="Username to Edit" required>
+        <input type="number" id="editBalance" placeholder="New Balance" required>
+        <button class="btn" onclick="editUser()">Edit User</button>
+        <div id="adminMessage"></div>
     </section>
 
     <footer>
