@@ -60,13 +60,15 @@
 <body>
     <h1>Gambling Games</h1>
     <div id="gameContainer">
-        <select id="gameSelector" onchange="loadGame()">
-            <option value="">Select a Game</option>
-            <option value="coinFlip">Coin Flip</option>
-            <option value="diceRoll">Dice Roll</option>
-            <option value="roulette">Roulette</option>
-            <option value="poker">Poker</option>
-        </select>
+        <div>
+            <select id="gameSelector" onchange="loadGame()">
+                <option value="">Select a Game</option>
+                <option value="coinFlip">Coin Flip</option>
+                <option value="diceRoll">Dice Roll</option>
+                <option value="roulette">Roulette</option>
+                <option value="poker">Poker</option>
+            </select>
+        </div>
         <div id="gameArea"></div>
     </div>
 
