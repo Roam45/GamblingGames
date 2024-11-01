@@ -1,16 +1,28 @@
-let balance = 100; // Starting balance
+let users = {}; // Store user data
+let currentUser = null;
+
+function signup() {
+    const username = document.getElementById('username').value;
+    if (username) {
+        users[username] = { balance: 100 }; // Initialize user with a balance
+        currentUser = username;
+        document.getElementById('balanceAmount').innerText = users[username].balance;
+        document.getElementById('signupMessage').innerText = `Account created for ${username}!`;
+        updateLeaderboard();
+        document.getElementById('username').value = ''; // Clear input
+    } else {
+        document.getElementById('signupMessage').innerText = 'Please enter a username.';
+    }
+}
 
 function loadGame() {
     const game = document.getElementById('gameSelector').value;
     const gameArea = document.getElementById('gameArea');
-    const resultArea = document.getElementById('result');
-    
     gameArea.innerHTML = '';
-    resultArea.innerHTML = '';
 
     if (game) {
         gameArea.innerHTML = `
-            <input type="number" id="betAmount" placeholder="Enter your bet" min="1" max="${balance}">
+            <input type="number" id="betAmount" placeholder="Enter your bet" min="1" max="${users[currentUser].balance}">
             <button onclick="${game}()">Play</button>
         `;
     }
@@ -37,8 +49,8 @@ function playGame(maxValue, getResult) {
     const betAmount = parseInt(document.getElementById('betAmount').value);
     const resultArea = document.getElementById('result');
 
-    if (betAmount > 0 && betAmount <= balance) {
-        balance -= betAmount; // Deduct bet from balance
+    if (betAmount > 0 && betAmount <= users[currentUser].balance) {
+        users[currentUser].balance -= betAmount; // Deduct bet from balance
         const result = getResult();
         resultArea.innerText = `Result: ${result}`;
 
@@ -46,15 +58,29 @@ function playGame(maxValue, getResult) {
         const win = Math.random() < 0.5; // 50% chance to win
         if (win) {
             const payout = betAmount * 2; // Win double
-            balance += payout;
-            resultArea.innerText += ` - You win! Total: $${balance}`;
+            users[currentUser].balance += payout;
+            resultArea.innerText += ` - You win! Total: $${users[currentUser].balance}`;
         } else {
-            resultArea.innerText += ` - You lose! Total: $${balance}`;
+            resultArea.innerText += ` - You lose! Total: $${users[currentUser].balance}`;
         }
-    } else {
-        resultArea.innerText = `Invalid bet. Your balance: $${balance}`;
-    }
 
-    // Update balance display
-    document.getElementById('balanceAmount').innerText = balance;
+        // Update balance display
+        document.getElementById('balanceAmount').innerText = users[currentUser].balance;
+
+        // Update leaderboard
+        updateLeaderboard();
+    } else {
+        resultArea.innerText = `Invalid bet. Your balance: $${users[currentUser].balance}`;
+    }
+}
+
+function updateLeaderboard() {
+    const leaderboardList = document.getElementById('leaderboardList');
+    leaderboardList.innerHTML = ''; // Clear existing leaderboard
+
+    for (const user in users) {
+        const li = document.createElement('li');
+        li.innerText = `${user}: $${users[user].balance}`;
+        leaderboardList.appendChild(li);
+    }
 }
