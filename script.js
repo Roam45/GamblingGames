@@ -1,45 +1,67 @@
-function loadGame() {
-    const game = document.getElementById('gameSelector').value;
-    const gameArea = document.getElementById('gameArea');
-    const resultArea = document.getElementById('result');
-
-    gameArea.innerHTML = '';
-    resultArea.innerHTML = '';
-
-    switch (game) {
-        case 'coinFlip':
-            gameArea.innerHTML = `<button onclick="coinFlip()">Flip Coin</button>`;
-            break;
-        case 'diceRoll':
-            gameArea.innerHTML = `<button onclick="rollDice()">Roll Dice</button>`;
-            break;
-        case 'roulette':
-            gameArea.innerHTML = `<button onclick="spinRoulette()">Spin Roulette</button>`;
-            break;
-        case 'poker':
-            gameArea.innerHTML = `<button onclick="playPoker()">Play Poker</button>`;
-            break;
-        default:
-            break;
-    }
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    margin: 0;
+    padding: 20px;
+    color: #fff;
 }
 
-function coinFlip() {
-    const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
-    document.getElementById('result').innerText = `Result: ${result}`;
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-function rollDice() {
-    const result = Math.floor(Math.random() * 6) + 1;
-    document.getElementById('result').innerText = `You rolled a ${result}`;
+#gameContainer {
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    color: #333;
 }
 
-function spinRoulette() {
-    const result = Math.floor(Math.random() * 37); // 0-36
-    document.getElementById('result').innerText = `Roulette result: ${result}`;
+select, input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
-function playPoker() {
-    const result = 'Poker is complex! Try again.';
-    document.getElementById('result').innerText = result;
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+#result {
+    font-size: 1.5em;
+    color: #28a745;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#contact {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.9em;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #666;
 }
