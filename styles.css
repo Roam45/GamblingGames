@@ -1,85 +1,107 @@
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #FFA500, #FFD700); /* Orange to Yellow gradient */
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #FFA500, #FFD700);
     margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    text-align: center;
     padding: 20px;
-    color: #fff;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
 h1 {
-    text-align: center;
-    margin-bottom: 20px;
+    font-size: 2.5em;
+    margin: 0;
 }
 
-#gameContainer {
-    display: flex; /* Use flexbox for layout */
-    justify-content: space-between;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    max-width: 800px;
+h2 {
+    margin-top: 10px;
+    font-size: 1.5em;
 }
 
-#gameAreaContainer {
-    flex: 1; /* Allow this section to take up space */
-    margin-right: 20px; /* Space between game area and result */
+#signupContainer {
+    margin: 20px 0;
 }
 
-select, input {
+input[type="text"], input[type="number"], select {
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
+    margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
+.btn {
     background-color: #28a745;
+    color: white;
+    padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-button:hover {
+.btn:hover {
     background-color: #218838;
 }
 
-#resultContainer {
-    width: 200px; /* Fixed width for result box */
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    margin-left: 50px; /* Space from game area */
+main {
+    display: flex;
+    justify-content: space-between;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-#result {
-    font-size: 1.5em;
-    color: #28a745;
+#gameAreaContainer {
+    flex: 1;
+    margin-right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+#balanceContainer {
     text-align: center;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    padding: 10px;
 }
 
-#balance {
-    font-size: 1.2em;
-    margin-bottom: 10px;
+#leaderboard {
+    text-align: center;
+    margin-top: 40px;
+}
+
+#leaderboardList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#leaderboardList li {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    margin: 5px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 #contact {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 0.9em;
+    margin-top: 20px;
 }
 
 footer {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 40px;
     font-size: 0.9em;
     color: #666;
 }
+
