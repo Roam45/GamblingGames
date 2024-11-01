@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gambling Games</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #gameContainer {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #fff;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gambling Games</h1>
+    <select id="gameSelector" onchange="loadGame()">
+        <option value="">Select a Game</option>
+        <option value="coinFlip">Coin Flip</option>
+        <option value="diceRoll">Dice Roll</option>
+        <option value="roulette">Roulette</option>
+    </select>
+
+    <div id="gameContainer"></div>
+
+    <script>
+        function loadGame() {
+            const gameContainer = document.getElementById('gameContainer');
+            gameContainer.innerHTML = ''; // Clear previous game
+
+            const game = document.getElementById('gameSelector').value;
+            if (game === 'coinFlip') {
+                coinFlipGame();
+            } else if (game === 'diceRoll') {
+                diceRollGame();
+            } else if (game === 'roulette') {
+                rouletteGame();
+            }
+        }
+
+        function coinFlipGame() {
+            const gameContainer = document.getElementById('gameContainer');
+            let balance = 100; // Starting balance
+
+            const button = document.createElement('button');
+            button.innerText = 'Flip Coin';
+            button.onclick = function () {
+                const bet = prompt('Enter your bet (your balance: $' + balance + '):');
+                if (bet > balance || bet <= 0) {
+                    alert('Invalid bet!');
+                    return;
+                }
+
+                balance -= bet;
+                const won = Math.random() < 0.5; // 50% chance to win
+
+                if (won) {
+                    balance += bet * 2; // Double the bet if won
+                    alert('You won! New balance: $' + balance);
+                } else {
+                    alert('You lost! New balance: $' + balance);
+                }
+
+                if (balance <= 0) {
+                    alert('You went bankrupt in "Coin Flip Game"');
+                    loadGame(); // Reset game
+                }
+            };
+
+            gameContainer.appendChild(button);
+        }
+
+        function diceRollGame() {
+            const gameContainer = document.getElementById('gameContainer');
+            let balance = 100; // Starting balance
+
+            const button = document.createElement('button');
+            button.innerText = 'Roll Dice';
+            button.onclick = function () {
+                const bet = prompt('Enter your bet (your balance: $' + balance + '):');
+                if (bet > balance || bet <= 0) {
+                    alert('Invalid bet!');
+                    return;
+                }
+
+                balance -= bet;
+                const roll = Math.floor(Math.random() * 6) + 1; // Roll a dice (1-6)
+                const won = roll > 3; // Win if roll is greater than 3
+
+                if (won) {
+                    balance += bet * 2; // Double the bet if won
+                    alert('You rolled a ' + roll + '. You won! New balance: $' + balance);
+                } else {
+                    alert('You rolled a ' + roll + '. You lost! New balance: $' + balance);
+                }
+
+                if (balance <= 0) {
+                    alert('You went bankrupt in "Dice Roll Game"');
+                    loadGame(); // Reset game
+                }
+            };
+
+            gameContainer.appendChild(button);
+        }
+
+        function rouletteGame() {
+            const gameContainer = document.getElementById('gameContainer');
+            let balance = 100; // Starting balance
+
+            const button = document.createElement('button');
+            button.innerText = 'Spin Roulette';
+            button.onclick = function () {
+                const bet = prompt('Enter your bet (your balance: $' + balance + '):');
+                if (bet > balance || bet <= 0) {
+                    alert('Invalid bet!');
+                    return;
+                }
+
+                balance -= bet;
+                const winningNumber = Math.floor(Math.random() * 37); // 0-36
+                const playerNumber = prompt('Pick a number (0-36):');
+
+                if (playerNumber < 0 || playerNumber > 36) {
+                    alert('Invalid number! Please pick between 0 and 36.');
+                    return;
+                }
+
+                if (playerNumber == winningNumber) {
+                    balance += bet * 36; // Win pays 36:1
+                    alert('The winning number is ' + winningNumber + '. You won! New balance: $' + balance);
+                } else {
+                    alert('The winning number is ' + winningNumber + '. You lost! New balance: $' + balance);
+                }
+
+                if (balance <= 0) {
+                    alert('You went bankrupt in "Roulette Game"');
+                    loadGame(); // Reset game
+                }
+            };
+
+            gameContainer.appendChild(button);
+        }
+    </script>
+</body>
+</html>
