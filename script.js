@@ -47,11 +47,14 @@ function playGame(maxValue, getResult) {
         if (win) {
             const payout = betAmount * 2; // Win double
             balance += payout;
-            resultArea.innerText += ` - You win! Total: ${balance}`;
+            resultArea.innerText += ` - You win! Total: $${balance}`;
         } else {
-            resultArea.innerText += ` - You lose! Total: ${balance}`;
+            resultArea.innerText += ` - You lose! Total: $${balance}`;
         }
     } else {
-        resultArea.innerText = `Invalid bet. Your balance: ${balance}`;
+        resultArea.innerText = `Invalid bet. Your balance: $${balance}`;
     }
+
+    // Update balance display
+    document.getElementById('balanceAmount').innerText = balance;
 }
