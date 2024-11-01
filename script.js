@@ -26,12 +26,6 @@ function updateBalanceDisplay() {
     localStorage.setItem('balance', balance); // Save balance to localStorage
 }
 
-function checkBankruptcy() {
-    if (balance <= 0) {
-        resetGame();
-    }
-}
-
 function coinFlipGame() {
     const gameArea = document.getElementById('gameArea');
     const resultArea = document.getElementById('result');
@@ -65,7 +59,7 @@ function coinFlipGame() {
         }
 
         balance -= bet;
-        const coinResult = Math.random() < 0.3 ? 'heads' : 'tails'; // Rigged to lose 70%
+        const coinResult = Math.random() < 0.5 ? 'heads' : 'tails';
 
         resultArea.innerText = 'Coin landed on ' + coinResult + '.';
 
@@ -94,31 +88,46 @@ function diceRollGame() {
     const gameArea = document.getElementById('gameArea');
     const resultArea = document.getElementById('result');
 
-    const inputWrapper = document.createElement('div');
-    inputWrapper.className = 'input-wrapper';
+    const inputWrapperBet = document.createElement('div');
+    inputWrapperBet.className = 'input-wrapper';
 
     const betInput = document.createElement('input');
     betInput.type = 'number';
     betInput.placeholder = 'Enter your bet';
 
+    const inputWrapperNumber = document.createElement('div');
+    inputWrapperNumber.className = 'input-wrapper';
+
+    const numberInput = document.createElement('input');
+    numberInput.type = 'number';
+    numberInput.placeholder = 'Pick a number (2-12)';
+    numberInput.min = 2; // Minimum sum of two dice
+    numberInput.max = 12; // Maximum sum of two dice
+
     const button = document.createElement('button');
     button.innerText = 'Roll Dice';
     button.onclick = function () {
         const bet = parseInt(betInput.value);
-        if (bet > balance || bet <= 0 || isNaN(bet)) {
-            resultArea.innerText = 'Invalid bet!';
+        const playerNumber = parseInt(numberInput.value);
+
+        if (bet > balance || bet <= 0 || isNaN(bet) || playerNumber < 2 || playerNumber > 12 || isNaN(playerNumber)) {
+            resultArea.innerText = 'Invalid bet or number!';
             return;
         }
 
         balance -= bet;
-        const roll = Math.floor(Math.random() * 6) + 1; // Roll a dice (1-6)
-        const won = Math.random() >= 0.7; // Rigged to lose 70%
+        const dice1 = Math.floor(Math.random() * 6) + 1; // Roll first die (1-6)
+        const dice2 = Math.floor(Math.random() * 6) + 1; // Roll second die (1-6)
+        const sum = dice1 + dice2;
 
+        resultArea.innerText = 'You rolled a ' + dice1 + ' and ' + dice2 + ' (Total: ' + sum + ').';
+
+        const won = sum === playerNumber; // Win if the sum matches player’s number
         if (won) {
-            balance += bet * 2;
-            resultArea.innerText = 'You rolled a ' + roll + '. You won!';
+            balance += bet * 2; // Player wins
+            resultArea.innerText += ' You won!';
         } else {
-            resultArea.innerText = 'You rolled a ' + roll + '. You lost!';
+            resultArea.innerText += ' You lost!';
         }
 
         updateBalanceDisplay();
@@ -129,8 +138,12 @@ function diceRollGame() {
         }
     };
 
-    inputWrapper.appendChild(betInput);
-    gameArea.appendChild(inputWrapper);
+    inputWrapperBet.appendChild(betInput);
+    gameArea.appendChild(inputWrapperBet);
+
+    inputWrapperNumber.appendChild(numberInput);
+    gameArea.appendChild(inputWrapperNumber);
+
     gameArea.appendChild(button);
 }
 
@@ -167,9 +180,8 @@ function rouletteGame() {
 
         balance -= bet;
         const winningNumber = Math.floor(Math.random() * 37); // 0-36
-        const won = (Math.random() < 0.03); // Rigged to lose 70%
 
-        if (playerNumber === winningNumber && won) {
+        if (playerNumber === winningNumber) {
             balance += bet * 36; // Win pays 36:1
             resultArea.innerText = 'The winning number is ' + winningNumber + '. You won!';
         } else {
