@@ -54,7 +54,6 @@ button:hover {
 input[type="number"] {
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin: 0 auto; /* Centering the input box */
 }
 
 #result {
@@ -91,6 +90,6 @@ footer {
 
 .input-wrapper {
     display: flex;
-    justify-content: center; /* Center the input */
+    justify-content: center;
     margin-bottom: 10px;
 }
