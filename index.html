@@ -138,7 +138,7 @@
                 }
 
                 balance -= bet;
-                const coinResult = Math.random() < 0.5 ? 'heads' : 'tails'; // Randomly select heads or tails
+                const coinResult = Math.random() < 0.5 ? 'heads' : 'tails';
 
                 resultArea.innerText = 'Coin landed on ' + coinResult + '.';
 
@@ -152,8 +152,8 @@
                 updateBalanceDisplay();
 
                 if (balance <= 0) {
-                    resultArea.innerText += ' You went bankrupt in "Coin Flip Game"';
                     resetGame();
+                    resultArea.innerText += ' You went bankrupt in "Coin Flip Game". Your balance has been reset.';
                 }
             };
 
@@ -181,10 +181,10 @@
 
                 balance -= bet;
                 const roll = Math.floor(Math.random() * 6) + 1; // Roll a dice (1-6)
-                const won = roll > 3; // Win if roll is greater than 3
+                const won = roll > 3;
 
                 if (won) {
-                    balance += bet * 2; // Double the bet if won
+                    balance += bet * 2;
                     resultArea.innerText = 'You rolled a ' + roll + '. You won!';
                 } else {
                     resultArea.innerText = 'You rolled a ' + roll + '. You lost!';
@@ -193,8 +193,8 @@
                 updateBalanceDisplay();
 
                 if (balance <= 0) {
-                    resultArea.innerText = 'You went bankrupt in "Dice Roll Game"';
                     resetGame();
+                    resultArea.innerText += ' You went bankrupt in "Dice Roll Game". Your balance has been reset.';
                 }
             };
 
@@ -240,8 +240,8 @@
                 updateBalanceDisplay();
 
                 if (balance <= 0) {
-                    resultArea.innerText += ' You went bankrupt in "Roulette Game"';
                     resetGame();
+                    resultArea.innerText += ' You went bankrupt in "Roulette Game". Your balance has been reset.';
                 }
             };
 
@@ -286,8 +286,8 @@
                 updateBalanceDisplay();
 
                 if (balance <= 0) {
-                    resultArea.innerText += ' You went bankrupt in "Poker Game"';
                     resetGame();
+                    resultArea.innerText += ' You went bankrupt in "Poker Game". Your balance has been reset.';
                 }
             };
 
