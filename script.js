@@ -5,13 +5,12 @@ import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from "https://
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBMfSTkHYHbceLi1xL8M01v3CeB7QBjpX0",
-    authDomain: "gamblinggames-53531.firebaseapp.com",
-    projectId: "gamblinggames-53531",
-    storageBucket: "gamblinggames-53531.appspot.com",
-    messagingSenderId: "626974281505",
-    appId: "1:626974281505:web:4ab370afa26bb03c423860",
-    measurementId: "G-K7PGD90X6T"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID",
 };
 
 // Initialize Firebase
@@ -29,11 +28,33 @@ window.signUp = async function() {
         const user = userCredential.user;
         await setDoc(doc(db, 'users', user.uid), { balance: 100 });
         document.getElementById('authMessage').innerText = 'Sign up successful! Welcome!';
-        document.getElementById('gameContainer').style.display = 'block';
     } catch (error) {
         document.getElementById('authMessage').innerText = error.message;
     }
 };
+
+// Sign In Function
+window.signIn = async function() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        document.getElementById('authMessage').innerText = 'Sign in successful!';
+        loadUserBalance(user.uid);
+        
+        if (email === "BeggadsBeGone@gmail.com") {
+            loadAllUserBalances();
+        } else {
+            document.getElementById('allBalances').innerHTML = ''; // Clear balances for non-admin users
+        }
+    } catch (error) {
+        document.getElementById('authMessage').innerText = error.message;
+    }
+};
+
+// Other functions remain unchanged
 
 // Sign In Function
 window.signIn = async function() {
