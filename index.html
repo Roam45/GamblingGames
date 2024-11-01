@@ -19,28 +19,61 @@
 
         #gameContainer {
             margin-top: 20px;
-            border: 1px solid #ccc;
+            border: 2px solid #ccc;
             padding: 20px;
             background-color: #fff;
             display: inline-block;
+            width: 300px; /* Fixed width for game box */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <h1>Gambling Games</h1>
-    <select id="gameSelector" onchange="loadGame()">
-        <option value="">Select a Game</option>
-        <option value="coinFlip">Coin Flip</option>
-        <option value="diceRoll">Dice Roll</option>
-        <option value="roulette">Roulette</option>
-    </select>
-
-    <div id="gameContainer"></div>
+    <div id="gameContainer">
+        <select id="gameSelector" onchange="loadGame()">
+            <option value="">Select a Game</option>
+            <option value="coinFlip">Coin Flip</option>
+            <option value="diceRoll">Dice Roll</option>
+            <option value="roulette">Roulette</option>
+            <option value="poker">Poker</option>
+        </select>
+        <div id="gameArea"></div>
+    </div>
 
     <script>
         function loadGame() {
-            const gameContainer = document.getElementById('gameContainer');
-            gameContainer.innerHTML = ''; // Clear previous game
+            const gameArea = document.getElementById('gameArea');
+            gameArea.innerHTML = ''; // Clear previous game
 
             const game = document.getElementById('gameSelector').value;
             if (game === 'coinFlip') {
@@ -49,18 +82,24 @@
                 diceRollGame();
             } else if (game === 'roulette') {
                 rouletteGame();
+            } else if (game === 'poker') {
+                pokerGame();
             }
         }
 
         function coinFlipGame() {
-            const gameContainer = document.getElementById('gameContainer');
             let balance = 100; // Starting balance
+            const gameArea = document.getElementById('gameArea');
+
+            const betInput = document.createElement('input');
+            betInput.type = 'number';
+            betInput.placeholder = 'Enter your bet';
 
             const button = document.createElement('button');
             button.innerText = 'Flip Coin';
             button.onclick = function () {
-                const bet = prompt('Enter your bet (your balance: $' + balance + '):');
-                if (bet > balance || bet <= 0) {
+                const bet = parseInt(betInput.value);
+                if (bet > balance || bet <= 0 || isNaN(bet)) {
                     alert('Invalid bet!');
                     return;
                 }
@@ -81,18 +120,23 @@
                 }
             };
 
-            gameContainer.appendChild(button);
+            gameArea.appendChild(betInput);
+            gameArea.appendChild(button);
         }
 
         function diceRollGame() {
-            const gameContainer = document.getElementById('gameContainer');
             let balance = 100; // Starting balance
+            const gameArea = document.getElementById('gameArea');
+
+            const betInput = document.createElement('input');
+            betInput.type = 'number';
+            betInput.placeholder = 'Enter your bet';
 
             const button = document.createElement('button');
             button.innerText = 'Roll Dice';
             button.onclick = function () {
-                const bet = prompt('Enter your bet (your balance: $' + balance + '):');
-                if (bet > balance || bet <= 0) {
+                const bet = parseInt(betInput.value);
+                if (bet > balance || bet <= 0 || isNaN(bet)) {
                     alert('Invalid bet!');
                     return;
                 }
@@ -114,27 +158,32 @@
                 }
             };
 
-            gameContainer.appendChild(button);
+            gameArea.appendChild(betInput);
+            gameArea.appendChild(button);
         }
 
         function rouletteGame() {
-            const gameContainer = document.getElementById('gameContainer');
             let balance = 100; // Starting balance
+            const gameArea = document.getElementById('gameArea');
+
+            const betInput = document.createElement('input');
+            betInput.type = 'number';
+            betInput.placeholder = 'Enter your bet';
 
             const button = document.createElement('button');
             button.innerText = 'Spin Roulette';
             button.onclick = function () {
-                const bet = prompt('Enter your bet (your balance: $' + balance + '):');
-                if (bet > balance || bet <= 0) {
+                const bet = parseInt(betInput.value);
+                if (bet > balance || bet <= 0 || isNaN(bet)) {
                     alert('Invalid bet!');
                     return;
                 }
 
                 balance -= bet;
                 const winningNumber = Math.floor(Math.random() * 37); // 0-36
-                const playerNumber = prompt('Pick a number (0-36):');
+                const playerNumber = parseInt(prompt('Pick a number (0-36):'));
 
-                if (playerNumber < 0 || playerNumber > 36) {
+                if (playerNumber < 0 || playerNumber > 36 || isNaN(playerNumber)) {
                     alert('Invalid number! Please pick between 0 and 36.');
                     return;
                 }
@@ -152,7 +201,51 @@
                 }
             };
 
-            gameContainer.appendChild(button);
+            gameArea.appendChild(betInput);
+            gameArea.appendChild(button);
+        }
+
+        function pokerGame() {
+            let balance = 100; // Starting balance
+            const gameArea = document.getElementById('gameArea');
+
+            const betInput = document.createElement('input');
+            betInput.type = 'number';
+            betInput.placeholder = 'Enter your bet';
+
+            const button = document.createElement('button');
+            button.innerText = 'Play Poker';
+            button.onclick = function () {
+                const bet = parseInt(betInput.value);
+                if (bet > balance || bet <= 0 || isNaN(bet)) {
+                    alert('Invalid bet!');
+                    return;
+                }
+
+                balance -= bet;
+                const playerCard = Math.floor(Math.random() * 13) + 1; // Player's card (1-13)
+                const dealerCard = Math.floor(Math.random() * 13) + 1; // Dealer's card (1-13)
+
+                alert('Your card: ' + playerCard + ', Dealer\'s card: ' + dealerCard);
+
+                if (playerCard > dealerCard) {
+                    balance += bet * 2; // Player wins
+                    alert('You win! New balance: $' + balance);
+                } else if (playerCard < dealerCard) {
+                    alert('You lose! New balance: $' + balance);
+                } else {
+                    balance += bet; // Tie, return bet
+                    alert('It\'s a tie! New balance: $' + balance);
+                }
+
+                if (balance <= 0) {
+                    alert('You went bankrupt in "Poker Game"');
+                    loadGame(); // Reset game
+                }
+            };
+
+            gameArea.appendChild(betInput);
+            gameArea.appendChild(button);
         }
     </script>
 </body>
