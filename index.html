@@ -23,7 +23,7 @@
             padding: 20px;
             background-color: #fff;
             display: inline-block;
-            width: 300px; /* Fixed width for game box */
+            width: 300px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
@@ -31,7 +31,7 @@
         select {
             width: 100%;
             padding: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             font-size: 16px;
         }
 
@@ -99,6 +99,7 @@
                 pokerGame();
             }
             updateBalanceDisplay();
+            localStorage.setItem('selectedGame', game); // Save selected game
         }
 
         function updateBalanceDisplay() {
@@ -115,34 +116,49 @@
             betInput.type = 'number';
             betInput.placeholder = 'Enter your bet';
 
+            const choiceSelect = document.createElement('select');
+            const headsOption = document.createElement('option');
+            headsOption.value = 'heads';
+            headsOption.innerText = 'Heads';
+            const tailsOption = document.createElement('option');
+            tailsOption.value = 'tails';
+            tailsOption.innerText = 'Tails';
+            choiceSelect.appendChild(headsOption);
+            choiceSelect.appendChild(tailsOption);
+
             const button = document.createElement('button');
             button.innerText = 'Flip Coin';
             button.onclick = function () {
                 const bet = parseInt(betInput.value);
+                const playerChoice = choiceSelect.value;
+
                 if (bet > balance || bet <= 0 || isNaN(bet)) {
                     resultArea.innerText = 'Invalid bet!';
                     return;
                 }
 
                 balance -= bet;
-                const won = Math.random() < 0.5; // 50% chance to win
+                const coinResult = Math.random() < 0.5 ? 'heads' : 'tails'; // Randomly select heads or tails
 
-                if (won) {
+                resultArea.innerText = 'Coin landed on ' + coinResult + '.';
+
+                if (playerChoice === coinResult) {
                     balance += bet * 2; // Double the bet if won
-                    resultArea.innerText = 'You won!';
+                    resultArea.innerText += ' You won!';
                 } else {
-                    resultArea.innerText = 'You lost!';
+                    resultArea.innerText += ' You lost!';
                 }
 
                 updateBalanceDisplay();
 
                 if (balance <= 0) {
-                    resultArea.innerText = 'You went bankrupt in "Coin Flip Game"';
-                    loadGame(); // Reset game
+                    resultArea.innerText += ' You went bankrupt in "Coin Flip Game"';
+                    resetGame();
                 }
             };
 
             gameArea.appendChild(betInput);
+            gameArea.appendChild(choiceSelect);
             gameArea.appendChild(button);
         }
 
@@ -178,7 +194,7 @@
 
                 if (balance <= 0) {
                     resultArea.innerText = 'You went bankrupt in "Dice Roll Game"';
-                    loadGame(); // Reset game
+                    resetGame();
                 }
             };
 
@@ -194,25 +210,27 @@
             betInput.type = 'number';
             betInput.placeholder = 'Enter your bet';
 
+            const numberInput = document.createElement('input');
+            numberInput.type = 'number';
+            numberInput.placeholder = 'Pick a number (0-36)';
+            numberInput.min = 0;
+            numberInput.max = 36;
+
             const button = document.createElement('button');
             button.innerText = 'Spin Roulette';
             button.onclick = function () {
                 const bet = parseInt(betInput.value);
-                if (bet > balance || bet <= 0 || isNaN(bet)) {
-                    resultArea.innerText = 'Invalid bet!';
+                const playerNumber = parseInt(numberInput.value);
+
+                if (bet > balance || bet <= 0 || isNaN(bet) || playerNumber < 0 || playerNumber > 36 || isNaN(playerNumber)) {
+                    resultArea.innerText = 'Invalid bet or number!';
                     return;
                 }
 
                 balance -= bet;
                 const winningNumber = Math.floor(Math.random() * 37); // 0-36
-                const playerNumber = parseInt(prompt('Pick a number (0-36):'));
 
-                if (playerNumber < 0 || playerNumber > 36 || isNaN(playerNumber)) {
-                    resultArea.innerText = 'Invalid number! Please pick between 0 and 36.';
-                    return;
-                }
-
-                if (playerNumber == winningNumber) {
+                if (playerNumber === winningNumber) {
                     balance += bet * 36; // Win pays 36:1
                     resultArea.innerText = 'The winning number is ' + winningNumber + '. You won!';
                 } else {
@@ -222,12 +240,13 @@
                 updateBalanceDisplay();
 
                 if (balance <= 0) {
-                    resultArea.innerText = 'You went bankrupt in "Roulette Game"';
-                    loadGame(); // Reset game
+                    resultArea.innerText += ' You went bankrupt in "Roulette Game"';
+                    resetGame();
                 }
             };
 
             gameArea.appendChild(betInput);
+            gameArea.appendChild(numberInput);
             gameArea.appendChild(button);
         }
 
@@ -268,12 +287,19 @@
 
                 if (balance <= 0) {
                     resultArea.innerText += ' You went bankrupt in "Poker Game"';
-                    loadGame(); // Reset game
+                    resetGame();
                 }
             };
 
             gameArea.appendChild(betInput);
             gameArea.appendChild(button);
+        }
+
+        function resetGame() {
+            balance = 100; // Reset balance
+            localStorage.setItem('balance', balance); // Update local storage
+            document.getElementById('gameSelector').value = ''; // Clear selected game
+            loadGame(); // Reload the game selection
         }
 
         // Load the selected game on page load
