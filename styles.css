@@ -1,26 +1,25 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
+    background: linear-gradient(270deg, #f4f4f4, #d1e0e0);
+    animation: backgroundAnimation 10s infinite alternate;
     margin: 0;
     padding: 20px;
-    background: linear-gradient(270deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
 }
 
-@keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+@keyframes backgroundAnimation {
+    0% { background-color: #f4f4f4; }
+    25% { background-color: #e0f7fa; }
+    50% { background-color: #fce4ec; }
+    75% { background-color: #f1f8e9; }
+    100% { background-color: #f4f4f4; }
 }
 
-/* Rest of your CSS styles */
 h1 {
     color: #333;
     margin-bottom: 20px;
 }
 
-/* Add your existing styles below */
 #gameContainer {
     margin-top: 20px;
     border: 2px solid #ccc;
@@ -32,4 +31,66 @@ h1 {
     border-radius: 8px;
 }
 
-/* ... (rest of your styles) ... */
+select, button, input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+input[type="number"] {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 0 auto; /* Centering the input box */
+}
+
+#result {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+#contact {
+    margin-top: 40px;
+    padding: 20px;
+    border: 2px solid #ccc;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    max-width: 400px;
+}
+
+#contact h2 {
+    margin-bottom: 10px;
+}
+
+#contact p {
+    margin: 0;
+    color: #555;
+}
+
+footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
+
+.input-wrapper {
+    display: flex;
+    justify-content: center; /* Center the input */
+    margin-bottom: 10px;
+}
