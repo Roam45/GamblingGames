@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -13,6 +13,7 @@ const firebaseConfig = {
     appId: "1:626974281505:web:4ab370afa26bb03c423860",
 };
 
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -20,7 +21,7 @@ const db = getFirestore(app);
 
 // Sign Up Function
 window.signUp = async function() {
-    const email = document.getElementById('email').value;
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
     try {
@@ -30,13 +31,16 @@ window.signUp = async function() {
         document.getElementById('authMessage').innerText = 'Sign up successful! Welcome!';
     } catch (error) {
         document.getElementById('authMessage').innerText = error.message;
+        console.error("Sign up error:", error); // Log error details
     }
 };
 
 // Sign In Function
 window.signIn = async function() {
-    const email = document.getElementById('email').value;
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
+
+    console.log("Attempting to sign in with:", email); // Debug log
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -50,62 +54,46 @@ window.signIn = async function() {
             document.getElementById('allBalances').innerHTML = ''; // Clear balances for non-admin users
         }
     } catch (error) {
+        console.error("Sign in error:", error); // Log error details
         document.getElementById('authMessage').innerText = error.message;
     }
 };
 
-// Other functions remain unchanged
-
-// Sign In Function
-window.signIn = async function() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
+// Load User Balance Function
+async function loadUserBalance(uid) {
     try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        document.getElementById('authMessage').innerText = 'Sign in successful!';
-        document.getElementById('gameContainer').style.display = 'block';
-        loadUserBalance(user.uid);
-        if (email === "BeggadsBeGone@gmail.com") {
-            loadAllUserBalances();
+        const userDoc = await getDoc(doc(db, 'users', uid));
+        if (userDoc.exists()) {
+            const data = userDoc.data();
+            document.getElementById('userBalance').innerText = `Your Balance: $${data.balance}`;
         } else {
-            document.getElementById('allBalances').innerHTML = ''; // Clear balances for non-admin users
+            console.log("No such user!");
         }
     } catch (error) {
-        document.getElementById('authMessage').innerText = error.message;
-    }
-};
-
-// Load User Balance
-async function loadUserBalance(uid) {
-    const userDoc = await getDoc(doc(db, 'users', uid));
-    if (userDoc.exists()) {
-        const userData = userDoc.data();
-        document.getElementById('balanceAmount').innerText = userData.balance;
+        console.error("Error loading user balance:", error);
     }
 }
 
-// Load All User Balances for Admin
+// Load All User Balances Function (Admin only)
 async function loadAllUserBalances() {
-    const usersCollection = collection(db, 'users');
-    const usersSnapshot = await getDocs(usersCollection);
-    let balancesList = '<h3>User Balances:</h3>';
-
-    usersSnapshot.forEach(doc => {
-        const userData = doc.data();
-        balancesList += `<p>User ID: ${doc.id}, Balance: ${userData.balance}</p>`;
-    });
-
-    document.getElementById('allBalances').innerHTML = balancesList;
+    try {
+        const usersSnapshot = await getDocs(collection(db, 'users'));
+        let balances = '';
+        usersSnapshot.forEach(doc => {
+            const data = doc.data();
+            balances += `<p>${doc.id}: $${data.balance}</p>`;
+        });
+        document.getElementById('allBalances').innerHTML = balances;
+    } catch (error) {
+        console.error("Error loading all user balances:", error);
+    }
 }
 
-// Auth State Listener
+// Optional: Monitor Auth State
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        loadUserBalance(user.uid);
-        document.getElementById('gameContainer').style.display = 'block';
+        console.log("User is signed in:", user);
     } else {
-        document.getElementById('gameContainer').style.display = 'none';
+        console.log("No user is signed in.");
     }
 });
