@@ -48,6 +48,8 @@ window.signIn = async function() {
         loadUserBalance(user.uid);
         if (email === "BeggadsBeGone@gmail.com") {
             loadAllUserBalances();
+        } else {
+            document.getElementById('allBalances').innerHTML = ''; // Clear balances for non-admin users
         }
     } catch (error) {
         document.getElementById('authMessage').innerText = error.message;
@@ -67,11 +69,11 @@ async function loadUserBalance(uid) {
 async function loadAllUserBalances() {
     const usersCollection = collection(db, 'users');
     const usersSnapshot = await getDocs(usersCollection);
-    let balancesList = '';
+    let balancesList = '<h3>User Balances:</h3>';
 
     usersSnapshot.forEach(doc => {
         const userData = doc.data();
-        balancesList += `<p>User: ${doc.id}, Balance: ${userData.balance}</p>`;
+        balancesList += `<p>User ID: ${doc.id}, Balance: ${userData.balance}</p>`;
     });
 
     document.getElementById('allBalances').innerHTML = balancesList;
