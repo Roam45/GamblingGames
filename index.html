@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎰🎰🎰 Gambling Games 🎰🎰🎰</title>
+    <title>Gambling Games</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,6 +52,7 @@
         input[type="number"] {
             border: 1px solid #ccc;
             border-radius: 5px;
+            margin: 0 auto; /* Centering the input box */
         }
 
         #result {
@@ -85,11 +86,17 @@
             font-size: 14px;
             color: #777;
         }
+
+        .input-wrapper {
+            display: flex;
+            justify-content: center; /* Center the input */
+            margin-bottom: 10px;
+        }
+
     </style>
 </head>
 <body>
     <h1>Gambling Games</h1>
-    <h2>By Roam45</h2>
     <div id="gameContainer">
         <button onclick="checkBankruptcy()">Bankrupt</button>
         <select id="gameSelector" onchange="loadGame()">
@@ -110,7 +117,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2024 Roam45 Games. All rights reserved.</p>
+        <p>&copy; 2024 Gambling Games. All rights reserved.</p>
     </footer>
 
     <script>
@@ -151,6 +158,9 @@
         function coinFlipGame() {
             const gameArea = document.getElementById('gameArea');
             const resultArea = document.getElementById('result');
+
+            const inputWrapper = document.createElement('div');
+            inputWrapper.className = 'input-wrapper';
 
             const betInput = document.createElement('input');
             betInput.type = 'number';
@@ -197,7 +207,8 @@
                 }
             };
 
-            gameArea.appendChild(betInput);
+            inputWrapper.appendChild(betInput);
+            gameArea.appendChild(inputWrapper);
             gameArea.appendChild(choiceSelect);
             gameArea.appendChild(button);
         }
@@ -205,6 +216,9 @@
         function diceRollGame() {
             const gameArea = document.getElementById('gameArea');
             const resultArea = document.getElementById('result');
+
+            const inputWrapper = document.createElement('div');
+            inputWrapper.className = 'input-wrapper';
 
             const betInput = document.createElement('input');
             betInput.type = 'number';
@@ -238,13 +252,17 @@
                 }
             };
 
-            gameArea.appendChild(betInput);
+            inputWrapper.appendChild(betInput);
+            gameArea.appendChild(inputWrapper);
             gameArea.appendChild(button);
         }
 
         function rouletteGame() {
             const gameArea = document.getElementById('gameArea');
             const resultArea = document.getElementById('result');
+
+            const inputWrapper = document.createElement('div');
+            inputWrapper.className = 'input-wrapper';
 
             const betInput = document.createElement('input');
             betInput.type = 'number';
@@ -285,7 +303,8 @@
                 }
             };
 
-            gameArea.appendChild(betInput);
+            inputWrapper.appendChild(betInput);
+            gameArea.appendChild(inputWrapper);
             gameArea.appendChild(numberInput);
             gameArea.appendChild(button);
         }
@@ -293,6 +312,9 @@
         function pokerGame() {
             const gameArea = document.getElementById('gameArea');
             const resultArea = document.getElementById('result');
+
+            const inputWrapper = document.createElement('div');
+            inputWrapper.className = 'input-wrapper';
 
             const betInput = document.createElement('input');
             betInput.type = 'number';
@@ -331,7 +353,8 @@
                 }
             };
 
-            gameArea.appendChild(betInput);
+            inputWrapper.appendChild(betInput);
+            gameArea.appendChild(inputWrapper);
             gameArea.appendChild(button);
         }
 
