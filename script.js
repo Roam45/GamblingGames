@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -46,6 +46,9 @@ window.signIn = async function() {
         document.getElementById('authMessage').innerText = 'Sign in successful!';
         document.getElementById('gameContainer').style.display = 'block';
         loadUserBalance(user.uid);
+        if (email === "BeggadsBeGone@gmail.com") {
+            loadAllUserBalances();
+        }
     } catch (error) {
         document.getElementById('authMessage').innerText = error.message;
     }
@@ -58,6 +61,20 @@ async function loadUserBalance(uid) {
         const userData = userDoc.data();
         document.getElementById('balanceAmount').innerText = userData.balance;
     }
+}
+
+// Load All User Balances for Admin
+async function loadAllUserBalances() {
+    const usersCollection = collection(db, 'users');
+    const usersSnapshot = await getDocs(usersCollection);
+    let balancesList = '';
+
+    usersSnapshot.forEach(doc => {
+        const userData = doc.data();
+        balancesList += `<p>User: ${doc.id}, Balance: ${userData.balance}</p>`;
+    });
+
+    document.getElementById('allBalances').innerHTML = balancesList;
 }
 
 // Auth State Listener
