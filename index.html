@@ -6,74 +6,76 @@
     <title>Gambling Games</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #f4f4f4, #eaeaea);
             margin: 0;
             padding: 20px;
         }
 
         h1 {
-            color: #333;
+            color: #2c3e50;
             margin-bottom: 20px;
+            font-size: 2.5em;
         }
 
         #gameContainer {
             margin-top: 20px;
-            border: 2px solid #ccc;
+            border: 1px solid #bdc3c7;
             padding: 20px;
             background-color: #fff;
             display: inline-block;
-            width: 300px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            width: 350px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
 
         select, button, input[type="number"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 10px;
             font-size: 16px;
-            cursor: pointer;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            transition: all 0.3s ease;
         }
 
         button {
-            background-color: #007BFF;
+            background-color: #3498db;
             color: white;
             border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            font-size: 18px;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #2980b9;
+            transform: scale(1.05);
         }
 
         input[type="number"] {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin: 0 auto; /* Centering the input box */
+            margin: 0 auto;
         }
 
         #result {
             margin-top: 20px;
             font-weight: bold;
-            color: #333;
+            color: #2c3e50;
         }
 
         #contact {
             margin-top: 40px;
             padding: 20px;
-            border: 2px solid #ccc;
+            border: 1px solid #bdc3c7;
             background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             display: inline-block;
             max-width: 400px;
         }
 
         #contact h2 {
             margin-bottom: 10px;
+            color: #2c3e50;
         }
 
         #contact p {
@@ -89,7 +91,7 @@
 
         .input-wrapper {
             display: flex;
-            justify-content: center; /* Center the input */
+            justify-content: center;
             margin-bottom: 10px;
         }
     </style>
@@ -188,12 +190,11 @@
                 }
 
                 balance -= bet;
-                const coinResult = Math.random() < 0.5 ? 'heads' : 'tails';
+                const coinResult = Math.random() < 0.3 ? 'heads' : 'tails'; // Rigged to lose 70%
 
                 resultArea.innerText = 'Coin landed on ' + coinResult + '.';
 
-                // Rigged outcome (30% chance to win)
-                if (playerChoice === coinResult && Math.random() >= 0.7) {
+                if (playerChoice === coinResult) {
                     balance += bet * 2; // Double the bet if won
                     resultArea.innerText += ' You won!';
                 } else {
@@ -236,9 +237,9 @@
 
                 balance -= bet;
                 const roll = Math.floor(Math.random() * 6) + 1; // Roll a dice (1-6)
-                const won = Math.random() >= 0.7; // 30% chance to win
+                const won = Math.random() >= 0.7; // Rigged to lose 70%
 
-                if (won && roll > 3) {
+                if (won) {
                     balance += bet * 2;
                     resultArea.innerText = 'You rolled a ' + roll + '. You won!';
                 } else {
@@ -292,8 +293,7 @@
                 balance -= bet;
                 const winningNumber = Math.floor(Math.random() * 37); // 0-36
 
-                // Rigged outcome (30% chance to win)
-                if (playerNumber === winningNumber && Math.random() >= 0.7) {
+                if (playerNumber === winningNumber) {
                     balance += bet * 36; // Win pays 36:1
                     resultArea.innerText = 'The winning number is ' + winningNumber + '. You won!';
                 } else {
@@ -341,16 +341,17 @@
                 const playerCard = Math.floor(Math.random() * 13) + 1; // Player's card (1-13)
                 const dealerCard = Math.floor(Math.random() * 13) + 1; // Dealer's card (1-13)
 
-                // Show both cards
                 resultArea.innerText = 'Your card: ' + playerCard + ', Dealer\'s card: ' + dealerCard;
 
-                // Rigged outcome (30% chance to win)
-                const playerWins = Math.random() >= 0.7; // 30% chance to win
-                if (playerWins && playerCard > dealerCard) {
+                const won = Math.random() >= 0.7; // Rigged to lose 70%
+                if (won) {
                     balance += bet * 2; // Player wins
                     resultArea.innerText += ' You win!';
-                } else {
+                } else if (playerCard < dealerCard) {
                     resultArea.innerText += ' You lose!';
+                } else {
+                    balance += bet; // Tie, return bet
+                    resultArea.innerText += ' It\'s a tie!';
                 }
 
                 updateBalanceDisplay();
