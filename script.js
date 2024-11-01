@@ -5,12 +5,12 @@ import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from "https://
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID",
+    apiKey: "AIzaSyBMfSTkHYHbceLi1xL8M01v3CeB7QBjpX0",
+    authDomain: "gamblinggames-53531.firebaseapp.com",
+    projectId: "gamblinggames-53531",
+    storageBucket: "gamblinggames-53531.appspot.com",
+    messagingSenderId: "626974281505",
+    appId: "1:626974281505:web:4ab370afa26bb03c423860",
 };
 
 // Initialize Firebase
