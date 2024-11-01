@@ -28,28 +28,19 @@
             border-radius: 8px;
         }
 
-        select {
+        select, button {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
             font-size: 16px;
-        }
-
-        input {
-            width: 80%;
-            padding: 10px;
-            font-size: 16px;
-            margin-bottom: 10px;
+            cursor: pointer;
         }
 
         button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
             background-color: #007BFF;
             color: white;
+            border: none;
+            border-radius: 5px;
         }
 
         button:hover {
@@ -65,17 +56,15 @@
 </head>
 <body>
     <h1>Gambling Games</h1>
-    <h2>By Roam45</h2>
     <div id="gameContainer">
-        <div>
-            <select id="gameSelector" onchange="loadGame()">
-                <option value="">Select a Game</option>
-                <option value="coinFlip">Coin Flip</option>
-                <option value="diceRoll">Dice Roll</option>
-                <option value="roulette">Roulette</option>
-                <option value="poker">Poker</option>
-            </select>
-        </div>
+        <button onclick="checkBankruptcy()">Bankrupt</button>
+        <select id="gameSelector" onchange="loadGame()">
+            <option value="">Select a Game</option>
+            <option value="coinFlip">Coin Flip</option>
+            <option value="diceRoll">Dice Roll</option>
+            <option value="roulette">Roulette</option>
+            <option value="poker">Poker</option>
+        </select>
         <div id="gameArea"></div>
         <div id="result"></div>
     </div>
@@ -107,6 +96,12 @@
             const resultArea = document.getElementById('result');
             resultArea.innerHTML = 'Current Balance: $' + balance;
             localStorage.setItem('balance', balance); // Save balance to localStorage
+        }
+
+        function checkBankruptcy() {
+            if (balance <= 0) {
+                resetGame();
+            }
         }
 
         function coinFlipGame() {
