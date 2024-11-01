@@ -1,95 +1,110 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background: linear-gradient(270deg, #f4f4f4, #d1e0e0);
-    animation: backgroundAnimation 10s infinite alternate;
-    margin: 0;
-    padding: 20px;
+let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 100;
+
+function loadGame() {
+    const gameArea = document.getElementById('gameArea');
+    const resultArea = document.getElementById('result');
+    gameArea.innerHTML = ''; // Clear previous game
+    resultArea.innerHTML = ''; // Clear previous result
+
+    const game = document.getElementById('gameSelector').value;
+    if (game === 'coinFlip') {
+        document.body.style.backgroundColor = "#e0f7fa"; // Light blue
+        coinFlipGame();
+    } else if (game === 'diceRoll') {
+        document.body.style.backgroundColor = "#fce4ec"; // Light pink
+        diceRollGame();
+    } else if (game === 'roulette') {
+        document.body.style.backgroundColor = "#f1f8e9"; // Light green
+        rouletteGame();
+    } else if (game === 'poker') {
+        document.body.style.backgroundColor = "#fff9c4"; // Light yellow
+        pokerGame();
+    } else if (game === 'blackjack') {
+        document.body.style.backgroundColor = "#ffccbc"; // Light orange
+        blackjackGame();
+    }
+    updateBalanceDisplay();
 }
 
-@keyframes backgroundAnimation {
-    0% { background-color: #f4f4f4; }
-    25% { background-color: #e0f7fa; }
-    50% { background-color: #fce4ec; }
-    75% { background-color: #f1f8e9; }
-    100% { background-color: #f4f4f4; }
+function updateBalanceDisplay() {
+    const resultArea = document.getElementById('result');
+    resultArea.innerHTML = 'Current Balance: $' + balance;
+    localStorage.setItem('balance', balance); // Save balance to localStorage
 }
 
-h1 {
-    color: #333;
-    margin-bottom: 20px;
+function blackjackGame() {
+    const gameArea = document.getElementById('gameArea');
+    const resultArea = document.getElementById('result');
+    
+    const betInput = document.createElement('input');
+    betInput.type = 'number';
+    betInput.placeholder = 'Enter your bet';
+    betInput.min = 1;
+
+    const button = document.createElement('button');
+    button.innerText = 'Deal Cards';
+    button.onclick = function () {
+        const bet = parseInt(betInput.value);
+        if (bet > balance || bet <= 0 || isNaN(bet)) {
+            resultArea.innerText = 'Invalid bet!';
+            return;
+        }
+
+        balance -= bet;
+        const playerCards = [drawCard(), drawCard()];
+        const dealerCards = [drawCard(), drawCard()];
+
+        const playerTotal = calculateTotal(playerCards);
+        const dealerTotal = calculateTotal(dealerCards);
+
+        resultArea.innerText = `Your cards: ${playerCards.join(', ')} (Total: ${playerTotal})\nDealer's cards: ${dealerCards[0]}, ?`;
+
+        // Check for blackjack
+        if (playerTotal === 21) {
+            balance += bet * 2.5; // Player wins with blackjack
+            resultArea.innerText += '\nYou hit a Blackjack! You win!';
+        } else {
+            // Allow player to choose to hit or stand
+            const hitButton = document.createElement('button');
+            hitButton.innerText = 'Hit';
+            hitButton.onclick = function () {
+                playerCards.push(drawCard());
+                const newPlayerTotal = calculateTotal(playerCards);
+                resultArea.innerText = `Your cards: ${playerCards.join(', ')} (Total: ${newPlayerTotal})\nDealer's cards: ${dealerCards[0]}, ?`;
+
+                if (newPlayerTotal > 21) {
+                    resultArea.innerText += '\nYou bust! Dealer wins!';
+                } else {
+                    // Stand logic here (you could add another button for "Stand")
+                }
+                updateBalanceDisplay();
+            };
+            gameArea.appendChild(hitButton);
+        }
+
+        updateBalanceDisplay();
+    };
+
+    gameArea.appendChild(betInput);
+    gameArea.appendChild(button);
 }
 
-#gameContainer {
-    margin-top: 20px;
-    border: 2px solid #ccc;
-    padding: 20px;
-    background-color: #fff;
-    display: inline-block;
-    width: 300px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+function drawCard() {
+    return Math.floor(Math.random() * 10) + 1; // Simulating a card from 1 to 10
 }
 
-select, button, input[type="number"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    cursor: pointer;
+function calculateTotal(cards) {
+    return cards.reduce((total, card) => total + card, 0);
 }
 
-button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
+// Other game functions remain the same...
 
-button:hover {
-    background-color: #0056b3;
-}
-
-input[type="number"] {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-#result {
-    margin-top: 20px;
-    font-weight: bold;
-    color: #333;
-}
-
-#contact {
-    margin-top: 40px;
-    padding: 20px;
-    border: 2px solid #ccc;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    display: inline-block;
-    max-width: 400px;
-}
-
-#contact h2 {
-    margin-bottom: 10px;
-}
-
-#contact p {
-    margin: 0;
-    color: #555;
-}
-
-footer {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #777;
-}
-
-.input-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-}
+// Load the selected game on page load
+window.onload = function () {
+    const savedGame = localStorage.getItem('selectedGame');
+    if (savedGame) {
+        document.getElementById('gameSelector').value = savedGame;
+        loadGame();
+    }
+    updateBalanceDisplay();
+};
