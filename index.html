@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gambling Games</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <h1>Gambling Games</h1>
-    <div id="signupContainer">
-        <h2>Sign Up</h2>
-        <input type="text" id="username" placeholder="Username">
-        <button onclick="signup()">Create Account</button>
-        <div id="signupMessage"></div>
-    </div>
+    <header>
+        <h1>Gambling Games</h1>
+        <div id="signupContainer">
+            <h2>Create an Account</h2>
+            <input type="text" id="username" placeholder="Username" required>
+            <button class="btn" onclick="signup()">Sign Up</button>
+            <div id="signupMessage"></div>
+        </div>
+    </header>
 
-    <div id="gameContainer">
+    <main id="gameContainer">
         <div id="gameAreaContainer">
             <select id="gameSelector" onchange="loadGame()">
                 <option value="">Select a Game</option>
@@ -25,26 +28,26 @@
                 <option value="poker">Poker</option>
             </select>
             <div id="gameArea"></div>
+            <div id="result"></div>
         </div>
-    </div>
 
-    <div id="balanceContainer">
-        <div id="balance">Balance: $<span id="balanceAmount">0</span></div>
-    </div>
+        <div id="balanceContainer">
+            <div id="balance">Balance: $<span id="balanceAmount">0</span></div>
+        </div>
+    </main>
 
-    <div id="leaderboard">
+    <section id="leaderboard">
         <h2>Leaderboard</h2>
         <ul id="leaderboardList"></ul>
-    </div>
-
-    <div id="contact">
-        <h2>Contact Us</h2>
-        <p>If you have any questions or feedback, feel free to reach out:</p>
-        <p>Email: <a href="mailto:BeggadsBeGone@gmail.com">BeggadsBeGone@gmail.com</a></p>
-        <p><a href="https://github.com/Roam45/GamblingGames">Provide changes</a></p>
-    </div>
+    </section>
 
     <footer>
+        <div id="contact">
+            <h2>Contact Us</h2>
+            <p>If you have any questions or feedback, feel free to reach out:</p>
+            <p>Email: <a href="mailto:BeggadsBeGone@gmail.com">BeggadsBeGone@gmail.com</a></p>
+            <p><a href="https://github.com/Roam45/GamblingGames">Provide changes</a></p>
+        </div>
         <p>&copy; 2024 Gambling Games. All rights reserved.</p>
     </footer>
 
