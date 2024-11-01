@@ -192,7 +192,8 @@
 
                 resultArea.innerText = 'Coin landed on ' + coinResult + '.';
 
-                if (playerChoice === coinResult) {
+                // Rigged outcome (30% chance to win)
+                if (playerChoice === coinResult && Math.random() >= 0.7) {
                     balance += bet * 2; // Double the bet if won
                     resultArea.innerText += ' You won!';
                 } else {
@@ -235,9 +236,9 @@
 
                 balance -= bet;
                 const roll = Math.floor(Math.random() * 6) + 1; // Roll a dice (1-6)
-                const won = roll > 3;
+                const won = Math.random() >= 0.7; // 30% chance to win
 
-                if (won) {
+                if (won && roll > 3) {
                     balance += bet * 2;
                     resultArea.innerText = 'You rolled a ' + roll + '. You won!';
                 } else {
@@ -291,7 +292,8 @@
                 balance -= bet;
                 const winningNumber = Math.floor(Math.random() * 37); // 0-36
 
-                if (playerNumber === winningNumber) {
+                // Rigged outcome (30% chance to win)
+                if (playerNumber === winningNumber && Math.random() >= 0.7) {
                     balance += bet * 36; // Win pays 36:1
                     resultArea.innerText = 'The winning number is ' + winningNumber + '. You won!';
                 } else {
@@ -339,16 +341,16 @@
                 const playerCard = Math.floor(Math.random() * 13) + 1; // Player's card (1-13)
                 const dealerCard = Math.floor(Math.random() * 13) + 1; // Dealer's card (1-13)
 
+                // Show both cards
                 resultArea.innerText = 'Your card: ' + playerCard + ', Dealer\'s card: ' + dealerCard;
 
-                if (playerCard > dealerCard) {
+                // Rigged outcome (30% chance to win)
+                const playerWins = Math.random() >= 0.7; // 30% chance to win
+                if (playerWins && playerCard > dealerCard) {
                     balance += bet * 2; // Player wins
                     resultArea.innerText += ' You win!';
-                } else if (playerCard < dealerCard) {
-                    resultArea.innerText += ' You lose!';
                 } else {
-                    balance += bet; // Tie, return bet
-                    resultArea.innerText += ' It\'s a tie!';
+                    resultArea.innerText += ' You lose!';
                 }
 
                 updateBalanceDisplay();
