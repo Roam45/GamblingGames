@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #6a11cb, #2575fc);
+    background: linear-gradient(to right, #FFA500, #FFD700); /* Orange to Yellow gradient */
     margin: 0;
     padding: 20px;
     color: #fff;
