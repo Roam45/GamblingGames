@@ -1,112 +1,74 @@
-\let users = {}; // Store user data
-let currentUser = null;
-
-function signup() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    
-    if (username && password) {
-        if (users[username]) {
-            document.getElementById('signupMessage').innerText = 'Username already exists.';
-            return;
-        }
-        users[username] = { balance: 100, password: password }; // Initialize user with a balance and password
-        currentUser = username;
-        document.getElementById('balanceAmount').innerText = users[username].balance;
-        document.getElementById('signupMessage').innerText = `Account created for ${username}!`;
-
-        // Show admin panel if the user is RoamDev
-        if (username === "RoamDev") {
-            document.getElementById('adminPanel').style.display = 'block';
-        }
-
-        updateLeaderboard();
-        document.getElementById('username').value = ''; // Clear input
-        document.getElementById('password').value = ''; // Clear input
-    } else {
-        document.getElementById('signupMessage').innerText = 'Please enter a username and password.';
-    }
+/* Reset some default styles */
+body, h1, h2, p {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
-function loadGame() {
-    const game = document.getElementById('gameSelector').value;
-    const gameArea = document.getElementById('gameArea');
-    gameArea.innerHTML = '';
-
-    if (game) {
-        gameArea.innerHTML = `
-            <input type="number" id="betAmount" placeholder="Enter your bet" min="1" max="${users[currentUser].balance}">
-            <button class="btn" onclick="${game}()">Play</button>
-        `;
-    }
+/* Set the background gradient */
+body {
+    background: linear-gradient(to right, orange, yellow);
+    color: #333;
+    padding: 20px;
 }
 
-function coinFlip() {
-    playGame(2, () => Math.random() < 0.5 ? 'Heads' : 'Tails');
+/* Style the main heading */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-function rollDice() {
-    playGame(6, () => Math.floor(Math.random() * 6) + 1);
+/* Container for game and auth sections */
+#gameContainer, #authContainer {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 400px;
 }
 
-function spinRoulette() {
-    playGame(37, () => Math.floor(Math.random() * 37));
+/* Style form inputs */
+input[type="email"], input[type="password"], select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-function playPoker() {
-    const result = 'Poker is complex! Try again.';
-    document.getElementById('result').innerText = result;
+/* Style buttons */
+button {
+    background-color: #ff5722; /* A vibrant button color */
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
 }
 
-function playGame(maxValue, getResult) {
-    const betAmount = parseInt(document.getElementById('betAmount').value);
-    const resultArea = document.getElementById('result');
-
-    if (betAmount > 0 && betAmount <= users[currentUser].balance) {
-        users[currentUser].balance -= betAmount; // Deduct bet from balance
-        const result = getResult();
-        resultArea.innerText = `Result: ${result}`;
-
-        // Simulate win/loss
-        const win = Math.random() < 0.5; // 50% chance to win
-        if (win) {
-            const payout = betAmount * 2; // Win double
-            users[currentUser].balance += payout;
-            resultArea.innerText += ` - You win! Total: $${users[currentUser].balance}`;
-        } else {
-            resultArea.innerText += ` - You lose! Total: $${users[currentUser].balance}`;
-        }
-
-        // Update balance display
-        document.getElementById('balanceAmount').innerText = users[currentUser].balance;
-
-        // Update leaderboard
-        updateLeaderboard();
-    } else {
-        resultArea.innerText = `Invalid bet. Your balance: $${users[currentUser].balance}`;
-    }
+button:hover {
+    background-color: #e64a19; /* Darker shade on hover */
 }
 
-function updateLeaderboard() {
-    const leaderboardList = document.getElementById('leaderboardList');
-    leaderboardList.innerHTML = ''; // Clear existing leaderboard
-
-    for (const user in users) {
-        const li = document.createElement('li');
-        li.innerText = `${user}: $${users[user].balance}`;
-        leaderboardList.appendChild(li);
-    }
+/* Contact section */
+#contact {
+    text-align: center;
+    margin: 20px 0;
 }
 
-function editUser() {
-    const editUsername = document.getElementById('editUsername').value;
-    const editBalance = parseInt(document.getElementById('editBalance').value);
+/* Footer style */
+footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+}
 
-    if (currentUser === "RoamDev" && users[editUsername]) {
-        users[editUsername].balance = editBalance;
-        updateLeaderboard();
-        document.getElementById('adminMessage').innerText = `Updated ${editUsername}'s balance to $${editBalance}.`;
-    } else {
-        document.getElementById('adminMessage').innerText = 'User not found or you are not authorized.';
-    }
+/* Message area */
+#authMessage {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
 }
