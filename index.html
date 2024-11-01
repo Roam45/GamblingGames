@@ -92,12 +92,10 @@
             justify-content: center; /* Center the input */
             margin-bottom: 10px;
         }
-
     </style>
 </head>
 <body>
     <h1>Gambling Games</h1>
-    <h2>By Roam45</h2>
     <div id="gameContainer">
         <button onclick="checkBankruptcy()">Bankrupt</button>
         <select id="gameSelector" onchange="loadGame()">
@@ -262,12 +260,15 @@
             const gameArea = document.getElementById('gameArea');
             const resultArea = document.getElementById('result');
 
-            const inputWrapper = document.createElement('div');
-            inputWrapper.className = 'input-wrapper';
+            const inputWrapperBet = document.createElement('div');
+            inputWrapperBet.className = 'input-wrapper';
 
             const betInput = document.createElement('input');
             betInput.type = 'number';
             betInput.placeholder = 'Enter your bet';
+
+            const inputWrapperNumber = document.createElement('div');
+            inputWrapperNumber.className = 'input-wrapper';
 
             const numberInput = document.createElement('input');
             numberInput.type = 'number';
@@ -304,9 +305,12 @@
                 }
             };
 
-            inputWrapper.appendChild(betInput);
-            gameArea.appendChild(inputWrapper);
-            gameArea.appendChild(numberInput);
+            inputWrapperBet.appendChild(betInput);
+            gameArea.appendChild(inputWrapperBet);
+
+            inputWrapperNumber.appendChild(numberInput);
+            gameArea.appendChild(inputWrapperNumber);
+
             gameArea.appendChild(button);
         }
 
