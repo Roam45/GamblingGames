@@ -3,15 +3,28 @@ let currentUser = null;
 
 function signup() {
     const username = document.getElementById('username').value;
-    if (username) {
-        users[username] = { balance: 100 }; // Initialize user with a balance
+    const password = document.getElementById('password').value;
+    
+    if (username && password) {
+        if (users[username]) {
+            document.getElementById('signupMessage').innerText = 'Username already exists.';
+            return;
+        }
+        users[username] = { balance: 100, password: password }; // Initialize user with a balance and password
         currentUser = username;
         document.getElementById('balanceAmount').innerText = users[username].balance;
         document.getElementById('signupMessage').innerText = `Account created for ${username}!`;
+
+        // Show admin panel if the user is RoamDev
+        if (username === "RoamDev") {
+            document.getElementById('adminPanel').style.display = 'block';
+        }
+
         updateLeaderboard();
         document.getElementById('username').value = ''; // Clear input
+        document.getElementById('password').value = ''; // Clear input
     } else {
-        document.getElementById('signupMessage').innerText = 'Please enter a username.';
+        document.getElementById('signupMessage').innerText = 'Please enter a username and password.';
     }
 }
 
@@ -23,7 +36,7 @@ function loadGame() {
     if (game) {
         gameArea.innerHTML = `
             <input type="number" id="betAmount" placeholder="Enter your bet" min="1" max="${users[currentUser].balance}">
-            <button onclick="${game}()">Play</button>
+            <button class="btn" onclick="${game}()">Play</button>
         `;
     }
 }
@@ -84,3 +97,17 @@ function updateLeaderboard() {
         leaderboardList.appendChild(li);
     }
 }
+
+function editUser() {
+    const editUsername = document.getElementById('editUsername').value;
+    const editBalance = parseInt(document.getElementById('editBalance').value);
+
+    if (currentUser === "RoamDev" && users[editUsername]) {
+        users[editUsername].balance = editBalance;
+        updateLeaderboard();
+        document.getElementById('adminMessage').innerText = `Updated ${editUsername}'s balance to $${editBalance}.`;
+    } else {
+        document.getElementById('adminMessage').innerText = 'User not found or you are not authorized.';
+    }
+}
+
