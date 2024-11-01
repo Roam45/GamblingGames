@@ -8,6 +8,13 @@
 </head>
 <body>
     <h1>Gambling Games</h1>
+    <div id="signupContainer">
+        <h2>Sign Up</h2>
+        <input type="text" id="username" placeholder="Username">
+        <button onclick="signup()">Create Account</button>
+        <div id="signupMessage"></div>
+    </div>
+
     <div id="gameContainer">
         <div id="gameAreaContainer">
             <select id="gameSelector" onchange="loadGame()">
@@ -19,10 +26,15 @@
             </select>
             <div id="gameArea"></div>
         </div>
-        <div id="resultContainer">
-            <div id="balance">Balance: $<span id="balanceAmount">100</span></div>
-            <div id="result"></div>
-        </div>
+    </div>
+
+    <div id="balanceContainer">
+        <div id="balance">Balance: $<span id="balanceAmount">0</span></div>
+    </div>
+
+    <div id="leaderboard">
+        <h2>Leaderboard</h2>
+        <ul id="leaderboardList"></ul>
     </div>
 
     <div id="contact">
