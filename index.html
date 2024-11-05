@@ -3,47 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gambling Games</title>
-    <link rel="stylesheet" href="styles.css">
-    <script type="module" src="script.js"></script>
-
-        // JavaScript code as shown above...
-    </script>
+    <title>Poker and Roulette Games</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+        }
+        .game-container {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .collapsible {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            font-size: 18px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .content {
+            padding: 10px;
+            background-color: #34495e;
+            display: none;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+        .card {
+            width: 60px;
+            height: 90px;
+            margin: 0 10px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .roulette-wheel {
+            margin-top: 20px;
+            font-size: 30px;
+        }
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Gambling Games</h1>
-    <div id="gameContainer" style="display: none;">
-        <select id="gameSelector" onchange="loadGame()">
-            <option value="">Select a Game</option>
-            <option value="coinFlip">Coin Flip</option>
-            <option value="diceRoll">Dice Roll</option>
-            <option value="roulette">Roulette</option>
-            <option value="poker">Poker</option>
-        </select>
-        <div id="gameArea"></div>
-        <div id="result"></div>
-        <p>Your Balance: <span id="balanceAmount">0</span></p>
-        <div id="allBalances" style="margin-top: 20px;"></div>
+
+<div class="game-container">
+    <h1>Poker and Roulette</h1>
+
+    <!-- Poker Game Section -->
+    <button class="collapsible">Toggle Poker Game</button>
+    <div class="content">
+        <h2>Five-Card Draw Poker</h2>
+        <div id="cards" class="cards">
+            <!-- Cards will be displayed here -->
+        </div>
+        <div>
+            <button onclick="dealHand()">Deal Hand</button>
+            <button onclick="drawCards()">Draw Cards</button>
+        </div>
+        <div id="status" class="status"></div>
     </div>
 
-    <div id="contact">
-        <h2>Contact Us</h2>
-        <p>If you have any questions or feedback, feel free to reach out:</p>
-        <p>Email: <a href="mailto:BeggadsBeGone@gmail.com">BeggadsBeGone@gmail.com</a></p>
-        <p><a href="https://github.com/Roam45/GamblingGames">Provide changes</a></p>
+    <!-- Roulette Game Section -->
+    <button class="collapsible">Toggle Roulette Game</button>
+    <div class="content">
+        <h2>Roulette</h2>
+        <div>
+            <button onclick="placeBet('red')">Bet on Red</button>
+            <button onclick="placeBet('black')">Bet on Black</button>
+            <button onclick="placeBet('odd')">Bet on Odd</button>
+            <button onclick="placeBet('even')">Bet on Even</button>
+            <button onclick="placeBet('number')">Bet on Number (1-36)</button>
+        </div>
+        <div class="roulette-wheel" id="roulette-wheel">
+            <!-- Roulette result will be displayed here -->
+        </div>
+        <div id="roulette-result" class="result"></div>
     </div>
 
-    <div id="authContainer">
-        <h2>Sign In / Sign Up</h2>
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button onclick="signUp()">Sign Up</button>
-        <button onclick="signIn()">Sign In</button>
-        <div id="authMessage"></div>
-    </div>
+</div>
 
-    <footer>
-        <p>&copy; 2024 Gambling Games. All rights reserved.</p>
-    </footer>
+<script>
+// Poker Game
+const suits = ['♠', '♣', '♦', '♥'];
+const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+let deck = [];
+let playerHand = [];
+
+function initializeDeck() {
+    deck = [];
+    for (let suit of suits) {
+        for (let value of values) {
+            deck.push({ value, suit });
+        }
+    }
+}
+
+function shuffleDeck() {
+    for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]]; // Swap elements
+    }
+}
+
+function dealHand() {
+    initializeDeck();
+    shuffleDeck();
+    playerHand = deck.slice(0, 5);
+    renderCards();
+    document.getElementById('status').textContent = '';
+}
+
+function renderCards() {
+    const cardsContainer = document.getElementById('cards');
+    cardsContainer.innerHTML = '';
+    
+    playerHand.forEach((card, index) => {
+        const cardElement = document.createElement('div');
+        cardElement.classList.add('card');
+        cardElement.textContent = card.value + card.suit;
+        cardElement.onclick = () => discardCard(index, cardElement);
+        cardsContainer.appendChild(cardElement);
+    });
+}
+
+function discardCard(index, cardElement) {
+    cardElement.classList.toggle('discarded');
+}
+
+function drawCards() {
+    const handElements = document.querySelectorAll('.card');
+    handElements.forEach((cardElement, index) => {
+        if (cardElement.classList.contains('discarded')) {
+            playerHand[index] = deck.pop();
+        }
+    });
+    renderCards();
+    evaluateHand();
+}
+
+function evaluateHand() {
+    const handValues = playerHand.map(card => card.value);
+    const handSuits = playerHand.map(card => card.suit);
+
+    const valueCounts = countOccurrences(handValues);
+    const suitCounts = countOccurrences(handSuits);
+
+    let handRank = '';
+
+    if (Object.values(valueCounts).includes(4)) {
+        handRank = 'Four of a Kind!';
+    } else if (Object.values(valueCounts).includes(3) && Object.values(valueCounts).includes(2)) {
+        handRank = 'Full House!';
+    } else if (Object.values(valueCounts).includes(3)) {
+        handRank = 'Three of a Kind!';
+    } else if (Object.values(valueCounts).filter(count => count === 2).length === 2) {
+        handRank = 'Two Pairs!';
+    } else if (Object.values(valueCounts).includes(2)) {
+        handRank = 'One Pair!';
+    } else {
+        handRank = 'High Card';
+    }
+
+    document.getElementById('status').textContent = `Your hand: ${handRank}`;
+}
+
+function countOccurrences(arr) {
+    return arr.reduce((acc, value) => {
+        acc[value] = (acc[value] || 0) + 1;
+        return acc;
+    }, {});
+}
+
+// Roulette Game
+function placeBet(type) {
+    const rouletteResult = spinRoulette();
+    let resultMessage = '';
+
+    if (type === 'red' || type === 'black') {
+        resultMessage = checkColorBet(rouletteResult, type);
+    } else if (type === 'odd' || type === 'even') {
+        resultMessage = checkOddEvenBet(rouletteResult, type);
+    } else if (type === 'number') {
+        const betNumber = prompt("Enter a number between 1 and 36:");
+        resultMessage = checkNumberBet(rouletteResult, betNumber);
+    }
+
+    document.getElementById('roulette-result').textContent = `Result: ${rouletteResult}`;
+    document.getElementById('roulette-result').textContent += ` - ${resultMessage}`;
+}
+
+function spinRoulette() {
+    const numbers = Array.from({ length: 36 }, (_, i) => i + 1);
+    const colors = ['red', 'black', 'green']; // 0 is green
+    const number = Math.floor(Math.random() * numbers.length);
+    const color = (numbers[number] % 2 === 0) ? 'black' : 'red'; // Simplified rule for black/red colors
+
+    return {
+        number: numbers[number],
+        color: color
+    };
+}
+
+function checkColorBet(result, color) {
+    return result.color === color ? 'You win!' : 'You lose!';
+}
+
+function checkOddEvenBet(result, type) {
+    const isOdd = result.number % 2 !== 0;
+    return (type === 'odd' && isOdd) || (type === 'even' && !isOdd) ? 'You win!' : 'You lose!';
+}
+
+function checkNumberBet(result, betNumber) {
+    return result.number === parseInt(betNumber) ? 'You win!' : 'You lose!';
+}
+
+// Collapsible functionality
+const collapsibles = document.querySelectorAll(".collapsible");
+collapsibles.forEach(button => {
+    button.addEventListener("click", () => {
+        const content = button.nextElementSibling;
+        content.style.display = content.style.display === "block" ? "none" : "block";
+    });
+});
+</script>
+
 </body>
 </html>
