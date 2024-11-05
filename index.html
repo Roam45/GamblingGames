@@ -103,8 +103,7 @@
         </div>
         <div>
             <input type="number" id="poker-bet" placeholder="Enter bet amount" min="1" />
-            <button onclick="dealHand()">Deal Hand</button>
-            <button onclick="drawCards()">Draw Cards</button>
+            <button onclick="dealHand()">Play Hand</button>
         </div>
         <div id="status" class="status"></div>
     </div>
@@ -136,6 +135,10 @@ let playerHand = [];
 
 // Update balance display
 function updateBalance() {
+    if (balance <= 0) {
+        balance = 100;  // Reset to 100 if balance is 0
+        alert("Your balance is $0. It has been reset to $100.");
+    }
     document.getElementById('balance').textContent = `Balance: $${balance}`;
 }
 
@@ -173,44 +176,19 @@ function dealHand() {
     shuffleDeck();
     playerHand = deck.slice(0, 5);
     renderCards();
-    document.getElementById('status').textContent = '';
+    evaluateHand();
 }
 
 function renderCards() {
     const cardsContainer = document.getElementById('cards');
     cardsContainer.innerHTML = '';
     
-    playerHand.forEach((card, index) => {
+    playerHand.forEach((card) => {
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
         cardElement.textContent = card.value + card.suit;
-        cardElement.onclick = () => discardCard(index, cardElement);
         cardsContainer.appendChild(cardElement);
     });
-}
-
-function discardCard(index, cardElement) {
-    cardElement.classList.toggle('discarded');
-}
-
-function drawCards() {
-    const bet = parseInt(document.getElementById('poker-bet').value);
-    if (bet > balance || bet <= 0) {
-        alert('Invalid bet amount');
-        return;
-    }
-
-    balance -= bet;  // Deduct bet from balance
-    updateBalance();
-
-    const handElements = document.querySelectorAll('.card');
-    handElements.forEach((cardElement, index) => {
-        if (cardElement.classList.contains('discarded')) {
-            playerHand[index] = deck.pop();
-        }
-    });
-    renderCards();
-    evaluateHand();
 }
 
 function evaluateHand() {
