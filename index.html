@@ -81,12 +81,18 @@
             font-weight: bold;
             margin-top: 20px;
         }
+        .balance {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
 <div class="game-container">
     <h1>Poker and Roulette</h1>
+    <div id="balance" class="balance">Balance: $100</div>
 
     <!-- Poker Game Section -->
     <button class="collapsible">Toggle Poker Game</button>
@@ -96,6 +102,7 @@
             <!-- Cards will be displayed here -->
         </div>
         <div>
+            <input type="number" id="poker-bet" placeholder="Enter bet amount" min="1" />
             <button onclick="dealHand()">Deal Hand</button>
             <button onclick="drawCards()">Draw Cards</button>
         </div>
@@ -107,6 +114,7 @@
     <div class="content">
         <h2>Roulette</h2>
         <div>
+            <input type="number" id="roulette-bet" placeholder="Enter bet amount" min="1" />
             <button onclick="placeBet('red')">Bet on Red</button>
             <button onclick="placeBet('black')">Bet on Black</button>
             <button onclick="placeBet('odd')">Bet on Odd</button>
@@ -118,16 +126,22 @@
         </div>
         <div id="roulette-result" class="result"></div>
     </div>
-
 </div>
 
 <script>
-// Poker Game
-const suits = ['♠', '♣', '♦', '♥'];
-const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-
+// Game state
+let balance = 100;
 let deck = [];
 let playerHand = [];
+
+// Update balance display
+function updateBalance() {
+    document.getElementById('balance').textContent = `Balance: $${balance}`;
+}
+
+// Poker Game Functions
+const suits = ['♠', '♣', '♦', '♥'];
+const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
 function initializeDeck() {
     deck = [];
@@ -146,6 +160,15 @@ function shuffleDeck() {
 }
 
 function dealHand() {
+    const bet = parseInt(document.getElementById('poker-bet').value);
+    if (bet > balance || bet <= 0) {
+        alert('Invalid bet amount');
+        return;
+    }
+
+    balance -= bet;  // Deduct bet from balance
+    updateBalance();
+
     initializeDeck();
     shuffleDeck();
     playerHand = deck.slice(0, 5);
@@ -171,6 +194,15 @@ function discardCard(index, cardElement) {
 }
 
 function drawCards() {
+    const bet = parseInt(document.getElementById('poker-bet').value);
+    if (bet > balance || bet <= 0) {
+        alert('Invalid bet amount');
+        return;
+    }
+
+    balance -= bet;  // Deduct bet from balance
+    updateBalance();
+
     const handElements = document.querySelectorAll('.card');
     handElements.forEach((cardElement, index) => {
         if (cardElement.classList.contains('discarded')) {
@@ -192,18 +224,24 @@ function evaluateHand() {
 
     if (Object.values(valueCounts).includes(4)) {
         handRank = 'Four of a Kind!';
+        balance += 20;  // Add 20 to balance for win
     } else if (Object.values(valueCounts).includes(3) && Object.values(valueCounts).includes(2)) {
         handRank = 'Full House!';
+        balance += 15;  // Add 15 to balance for win
     } else if (Object.values(valueCounts).includes(3)) {
         handRank = 'Three of a Kind!';
+        balance += 10;  // Add 10 to balance for win
     } else if (Object.values(valueCounts).filter(count => count === 2).length === 2) {
         handRank = 'Two Pairs!';
+        balance += 5;   // Add 5 to balance for win
     } else if (Object.values(valueCounts).includes(2)) {
         handRank = 'One Pair!';
+        balance += 2;   // Add 2 to balance for win
     } else {
         handRank = 'High Card';
     }
 
+    updateBalance();
     document.getElementById('status').textContent = `Your hand: ${handRank}`;
 }
 
@@ -214,8 +252,17 @@ function countOccurrences(arr) {
     }, {});
 }
 
-// Roulette Game
+// Roulette Game Functions
 function placeBet(type) {
+    const betAmount = parseInt(document.getElementById('roulette-bet').value);
+    if (betAmount > balance || betAmount <= 0) {
+        alert('Invalid bet amount');
+        return;
+    }
+
+    balance -= betAmount;
+    updateBalance();
+
     const rouletteResult = spinRoulette();
     let resultMessage = '';
 
@@ -228,8 +275,12 @@ function placeBet(type) {
         resultMessage = checkNumberBet(rouletteResult, betNumber);
     }
 
-    document.getElementById('roulette-result').textContent = `Result: ${rouletteResult}`;
-    document.getElementById('roulette-result').textContent += ` - ${resultMessage}`;
+    if (resultMessage.includes('win')) {
+        balance += betAmount * 2;  // Double the bet if win
+    }
+
+    updateBalance();
+    document.getElementById('roulette-result').textContent = `Result: ${rouletteResult.number} (${rouletteResult.color}) - ${resultMessage}`;
 }
 
 function spinRoulette() {
@@ -265,6 +316,10 @@ collapsibles.forEach(button => {
         content.style.display = content.style.display === "block" ? "none" : "block";
     });
 });
+
+// Initial setup
+updateBalance();
+
 </script>
 
 </body>
