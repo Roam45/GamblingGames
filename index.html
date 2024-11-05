@@ -135,8 +135,9 @@ let playerHand = [];
 
 // Update balance display
 function updateBalance() {
+    // Reset balance if it's zero or negative
     if (balance <= 0) {
-        balance = 100;  // Reset to 100 if balance is 0
+        balance = 100;  // Reset to $100
         alert("Your balance is $0. It has been reset to $100.");
     }
     document.getElementById('balance').textContent = `Balance: $${balance}`;
